@@ -3,7 +3,7 @@ import Navbar from "../../components/isNavbar";
 import Sidebar from "../../components/Sidebar";
 import Dialog from "../../components/Dialog";
 import useAuth from "../../lib/UseAuth";
-const API_BASE_URL = import.meta.env.VITE_API_LOCAL_URL;
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const Kategory_List = () => {
   const [isData, setData] = useState([]);

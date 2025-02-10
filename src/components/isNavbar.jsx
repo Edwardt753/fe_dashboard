@@ -2,6 +2,7 @@ import React from "react";
 import { IoArrowBack, IoMenu } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const Navbar = ({ toggleSidebar, isSidebarOpen, isTitle, isToken }) => {
   const navigate = useNavigate();
@@ -9,7 +10,7 @@ const Navbar = ({ toggleSidebar, isSidebarOpen, isTitle, isToken }) => {
   //must use delete http method
   const authLogout = async () => {
     try {
-      await axios.delete("http://localhost:8080/logout", {
+      await axios.delete(`${API_BASE_URL}/logout`, {
         headers: {
           Authorization: `Bearer ${isToken}`,
         },

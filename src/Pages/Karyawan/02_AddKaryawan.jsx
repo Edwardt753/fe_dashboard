@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom"; // Import the hook
 import useAuth from "../../lib/UseAuth";
-const API_BASE_URL = import.meta.env.VITE_API_LOCAL_URL;
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const AddKaryawanPage = () => {
   const [formData, setFormData] = useState({

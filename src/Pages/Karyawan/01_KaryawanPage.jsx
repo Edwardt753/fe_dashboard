@@ -4,7 +4,7 @@ import Sidebar from "../../components/Sidebar";
 import { useNavigate, useLocation } from "react-router-dom";
 import useAuth from "../../lib/UseAuth";
 
-const API_BASE_URL = import.meta.env.VITE_API_LOCAL_URL;
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const KaryawanPage = () => {
   const [employeeData, setEmployeeData] = useState([]);

@@ -16,7 +16,7 @@ export const Card = ({
         {["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu", "Minggu"].map(
           (day) => (
             <p key={day}>
-              <strong>{day}:</strong> {harianData[day.toLowerCase()]} jam
+              <strong>{day}:</strong> {harianData[day.toLowerCase()]}
             </p>
           )
         )}

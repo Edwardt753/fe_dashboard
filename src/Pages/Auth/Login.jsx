@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import React from "react";
-const API_BASE_URL = import.meta.env.VITE_API_LOCAL_URL;
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const LoginPage = () => {
   const [username, setUsername] = useState("");

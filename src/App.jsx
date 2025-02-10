@@ -17,9 +17,8 @@ function App() {
         <Route path="/add" element={<AddKaryawanPage />} />
         <Route path="/edit/:id" element={<EditKaryawanPage />} />
         <Route path="/details/:id" element={<GajianDetails />} />
-        {/* {/* <Route path="/test" element={<DashMain />} /> */}
-        <Route path="/kategori" element={<Kategory_List />} /> */
-        <Route path="/login" element={<LoginPage />} /> */
+        <Route path="/kategori" element={<Kategory_List />} />
+        <Route path="/login" element={<LoginPage />} />
       </Routes>
     </Router>
   );

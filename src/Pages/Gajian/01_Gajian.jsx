@@ -4,7 +4,7 @@ import Sidebar from "../../components/Sidebar";
 import { useNavigate, useLocation } from "react-router-dom";
 import Dialog from "../../components/Dialog";
 import useAuth from "../../lib/UseAuth";
-const API_BASE_URL = import.meta.env.VITE_API_LOCAL_URL;
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const GajianPage = () => {
   const location = useLocation();
@@ -37,7 +37,12 @@ const GajianPage = () => {
   const handleRemoveGaji = async (id) => {
     try {
       const response = await axiosJWT.put(
-        `${API_BASE_URL}/master/gaji/delete/${id}`
+        `${API_BASE_URL}/master/gaji/delete/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       if (response.status === 200) {
         fetchData();

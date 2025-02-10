@@ -5,7 +5,7 @@ import { Card } from "../../components/Card";
 import Navbar from "../../components/isNavbar";
 import Sidebar from "../../components/Sidebar";
 import useAuth from "../../lib/UseAuth";
-const API_BASE_URL = import.meta.env.VITE_API_LOCAL_URL;
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const GajianDetails = () => {
   const location = useLocation();
