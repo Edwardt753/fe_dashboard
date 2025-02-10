@@ -11,9 +11,6 @@ const Navbar = ({ toggleSidebar, isSidebarOpen, isTitle, isToken }) => {
   const authLogout = async () => {
     try {
       await axios.delete(`${API_BASE_URL}/logout`, {
-        headers: {
-          Authorization: `Bearer ${isToken}`,
-        },
         withCredentials: true,
       });
       navigate("/login");

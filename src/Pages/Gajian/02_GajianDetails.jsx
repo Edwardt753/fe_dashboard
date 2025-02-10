@@ -241,13 +241,14 @@ const GajianDetails = () => {
               />
             ))}
           </div>
+
+          <FloatingBox
+            gajiList={gajiList}
+            CalculateGaji={CalculateGaji}
+            totalGaji={totalGaji}
+          />
         </div>
         {/* Floating Box */}
-        <FloatingBox
-          gajiList={gajiList}
-          CalculateGaji={CalculateGaji}
-          totalGaji={totalGaji}
-        />
       </div>
     </div>
   );
