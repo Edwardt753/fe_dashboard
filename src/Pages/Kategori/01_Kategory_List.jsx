@@ -96,6 +96,7 @@ const Kategory_List = () => {
         <Navbar
           toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
           isTitle="Halaman Kategori Gaji"
+          isToken={token}
         />
         <div className="p-4 overflow-x-auto shadow-md sm:rounded-lg">
           <button

@@ -1,9 +1,25 @@
 import React from "react";
 import { IoArrowBack, IoMenu } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
-const Navbar = ({ toggleSidebar, isSidebarOpen, isTitle }) => {
+const Navbar = ({ toggleSidebar, isSidebarOpen, isTitle, isToken }) => {
   const navigate = useNavigate();
+
+  //must use delete http method
+  const authLogout = async () => {
+    try {
+      await axios.delete("http://localhost:8080/logout", {
+        headers: {
+          Authorization: `Bearer ${isToken}`,
+        },
+        withCredentials: true,
+      });
+      navigate("/login");
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const handleBack = () => {
     navigate(-1);
@@ -28,7 +44,9 @@ const Navbar = ({ toggleSidebar, isSidebarOpen, isTitle }) => {
 
       {/* Right Side: Optional Actions */}
       <div className="flex items-center gap-x-5">
-        {/* Add optional icons/buttons here */}
+        <button className="btn btn-error" onClick={authLogout}>
+          Log Out
+        </button>
       </div>
     </nav>
   );
