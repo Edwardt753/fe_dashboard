@@ -4,6 +4,7 @@ import Sidebar from "../../components/Sidebar";
 import { useNavigate, useLocation } from "react-router-dom";
 import Dialog from "../../components/Dialog";
 import useAuth from "../../lib/UseAuth";
+const API_BASE_URL = import.meta.env.VITE_API_LOCAL_URL;
 
 const GajianPage = () => {
   const location = useLocation();
@@ -12,19 +13,17 @@ const GajianPage = () => {
   const [gajiData, setGajiData] = useState([]);
   const [alertVisible, setAlertVisible] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isDialogOpen, setDialogOpen] = useState(false);
   const { token, axiosJWT } = useAuth();
 
   const fetchData = async () => {
     try {
-      const response = await axiosJWT.get(
-        "https://api2.edwardver753.my.id/master/gaji",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await axiosJWT.get(`${API_BASE_URL}/master/gaji`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       if (response.status === 200) {
         setGajiData(response.data.data);
       } else {
@@ -38,7 +37,7 @@ const GajianPage = () => {
   const handleRemoveGaji = async (id) => {
     try {
       const response = await axiosJWT.put(
-        `https://api2.edwardver753.my.id/master/gaji/delete/${id}`
+        `${API_BASE_URL}/master/gaji/delete/${id}`
       );
       if (response.status === 200) {
         fetchData();
@@ -61,7 +60,7 @@ const GajianPage = () => {
 
     try {
       const response = await axiosJWT.post(
-        `https://api2.edwardver753.my.id/master/gaji/add`,
+        `${API_BASE_URL}/master/gaji/add`,
         { date: selectedDate },
         {
           headers: {
@@ -92,13 +91,23 @@ const GajianPage = () => {
   return (
     <div className="flex h-screen">
       {/* Sidebar */}
-      <Sidebar className="w-1/4 min-w-[200px]" />
+      <Sidebar
+        isOpen={isSidebarOpen}
+        toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
+      />
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col">
+      <div
+        className={`flex-1 flex flex-col transition-all duration-300 ${
+          isSidebarOpen ? "ml-64" : "ml-0 lg:ml-64"
+        }`}
+      >
         {/* Navbar */}
-        <Navbar />
-        <div className="p-4 overflow-x-auto shadow-md sm:rounded-lg ml-64">
+        <Navbar
+          toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
+          isTitle="Halaman Gaji"
+        />
+        <div className="p-4 overflow-x-auto shadow-md sm:rounded-lg">
           {/* Custom Alert */}
           {alertVisible && (
             <div role="alert" className="alert alert-error">
@@ -140,66 +149,61 @@ const GajianPage = () => {
             </Dialog>
           )}
           {/* Table */}
-          <div className="w-full max-w-full text-sm text-left text-gray-500 dark:text-gray-400">
-            <table className="w-full max-w-full text-sm text-left text-gray-500 dark:text-gray-400">
-              <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                <tr>
-                  <th scope="col" className="px-6 py-3">
-                    Id
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    Tanggal Gajian
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    Total Gajian
-                  </th>
-                  <th scope="col" className="px-12 py-3">
-                    Action
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {gajiData.map((gaji, index) => (
-                  <tr
-                    key={gaji.id}
-                    className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+          <table className="w-full max-w-full text-sm text-left text-gray-500 dark:text-gray-400">
+            <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+              <tr>
+                <th scope="col" className="px-6 py-3">
+                  Id
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  Tanggal Gajian
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  Total Gajian
+                </th>
+                <th scope="col" className="px-12 py-3">
+                  Action
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {gajiData.map((gaji, index) => (
+                <tr
+                  key={gaji.id}
+                  className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+                >
+                  <td className="px-6 py-4">{index + 1}</td>
+                  <td
+                    scope="row"
+                    className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                   >
-                    <td className="px-6 py-4">{index + 1}</td>
-                    <td
-                      scope="row"
-                      className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                    {new Date(gaji.tanggal_gajian).toLocaleDateString("id-ID", {
+                      day: "numeric",
+                      month: "long",
+                      year: "numeric",
+                    })}
+                  </td>
+                  <td className="px-6 py-4">
+                    {gaji.total_gaji || "Belum dihitung"}
+                  </td>
+                  <td className="px-6 py-4">
+                    <a
+                      onClick={() => navigate(`/details/${gaji.id}`)}
+                      className="font-medium text-blue-600 dark:text-blue-500 hover:underline cursor-pointer"
                     >
-                      {new Date(gaji.tanggal_gajian).toLocaleDateString(
-                        "id-ID",
-                        {
-                          day: "numeric",
-                          month: "long",
-                          year: "numeric",
-                        }
-                      )}
-                    </td>
-                    <td className="px-6 py-4">
-                      {gaji.total_gaji || "Belum dihitung"}
-                    </td>
-                    <td className="px-6 py-4">
-                      <a
-                        onClick={() => navigate(`/details/${gaji.id}`)}
-                        className="font-medium text-blue-600 dark:text-blue-500 hover:underline cursor-pointer"
-                      >
-                        Details
-                      </a>
-                      <a
-                        onClick={() => handleRemoveGaji(gaji.id)}
-                        className="font-medium text-red-600 dark:text-red-500 hover:underline ml-4 cursor-pointer"
-                      >
-                        Remove
-                      </a>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                      Details
+                    </a>
+                    <a
+                      onClick={() => handleRemoveGaji(gaji.id)}
+                      className="font-medium text-red-600 dark:text-red-500 hover:underline ml-4 cursor-pointer"
+                    >
+                      Remove
+                    </a>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>

@@ -5,9 +5,11 @@ import { Card } from "../../components/Card";
 import Navbar from "../../components/isNavbar";
 import Sidebar from "../../components/Sidebar";
 import useAuth from "../../lib/UseAuth";
+const API_BASE_URL = import.meta.env.VITE_API_LOCAL_URL;
 
 const GajianDetails = () => {
   const location = useLocation();
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const { id } = useParams();
   const [cardsData, setCardsData] = useState([]);
   const [listKaryawan, setListKaryawan] = useState([]);
@@ -18,7 +20,7 @@ const GajianDetails = () => {
   const CalculateGaji = async () => {
     try {
       const response = await axiosJWT.post(
-        `https://api2.edwardver753.my.id/calculate/${id}`,
+        `${API_BASE_URL}/calculate/${id}`,
         {
           gajiList,
         },
@@ -43,7 +45,7 @@ const GajianDetails = () => {
   const deleteDataGaji = async (id, k_id) => {
     try {
       const response = await axiosJWT.delete(
-        `https://api2.edwardver753.my.id/gaji/delete/${id}/${k_id}`,
+        `${API_BASE_URL}/gaji/delete/${id}/${k_id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -62,14 +64,11 @@ const GajianDetails = () => {
 
   const fetchKaryawan = async () => {
     try {
-      const response = await axiosJWT.get(
-        "https://api2.edwardver753.my.id/karyawan",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      ); // Replace with your API URL
+      const response = await axiosJWT.get(`${API_BASE_URL}/karyawan`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }); // Replace with your API URL
       setListKaryawan(response.data.data); // Assuming the API response structure
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -78,14 +77,11 @@ const GajianDetails = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axiosJWT.get(
-        `https://api2.edwardver753.my.id/gaji/${id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await axiosJWT.get(`${API_BASE_URL}/gaji/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       if (response.status === 200) {
         setCardsData(response.data.data);
       } else {
@@ -107,7 +103,7 @@ const GajianDetails = () => {
     e.preventDefault();
     try {
       const response = await axiosJWT.post(
-        `https://api2.edwardver753.my.id/gaji/${id}`,
+        `${API_BASE_URL}/gaji/${id}`,
         //
         {
           karyawan_id: parseInt(e.target.karyawan_id.value, 10),
@@ -143,10 +139,20 @@ const GajianDetails = () => {
 
   return (
     <div className="flex h-screen">
-      <Sidebar className="w-1/4 min-w-[200px]" />
-      <div className="flex-1 flex flex-col">
-        <Navbar />
-        <div className="p-4 overflow-x-auto ml-64">
+      <Sidebar
+        isOpen={isSidebarOpen}
+        toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
+      />
+      <div
+        className={`flex-1 flex flex-col transition-all duration-300 ${
+          isSidebarOpen ? "ml-64" : "ml-0 lg:ml-64"
+        }`}
+      >
+        <Navbar
+          toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
+          isTitle="Halaman Gaji Detail"
+        />
+        <div className="p-4 overflow-x-auto shadow-md sm:rounded-lg">
           <button
             className="btn btn-info btn-md w-28 mt-4 ml-4"
             onClick={() => document.getElementById("my_modal_1").showModal()}
@@ -220,10 +226,10 @@ const GajianDetails = () => {
               </form>
             </div>
           </dialog>
-          <div className="flex flex-wrap gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
             {cardsData.map((card, index) => (
               <Card
-                key={index + 1}
+                key={index}
                 name={
                   card.karyawan ? card.karyawan.fullname : "Unknown Employee"
                 }

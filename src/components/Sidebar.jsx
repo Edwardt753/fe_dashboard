@@ -1,45 +1,66 @@
 import React from "react";
-import { FaHome } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import { MdManageAccounts } from "react-icons/md";
+import { MdManageAccounts, MdMenu, MdClose } from "react-icons/md";
 import { FaMoneyBillWaveAlt } from "react-icons/fa";
 import { BiSolidCategory } from "react-icons/bi";
 
-const Sidebar = () => {
+const Sidebar = ({ isOpen, toggleSidebar }) => {
   return (
-    <div className="w-64 bg-gray-800 fixed h-full px-4 py-2">
-      <div className="my-2 mb-4">
-        <h1 className="text-2xl text-white font-bold">Dashboard Edward</h1>
-      </div>
-      {/* horizontal line */}
-      <hr />
-      <ul className="mt-3 text-white font-bold">
-        <Link to="/">
-          <li className="mb-4 rounded hover:shadow hover:bg-blue-500 py-2">
-            <a className="px-3">
-              <MdManageAccounts className="inline-block w-6 h-6 mr-2 -mt-2"></MdManageAccounts>
+    <>
+      {/* Sidebar Toggle Button for Mobile */}
+      <button
+        className="lg:hidden fixed bottom-8 left-4 z-50 bg-gray-800 text-white p-2 rounded-full shadow-md"
+        onClick={toggleSidebar}
+      >
+        {isOpen ? <MdClose size={24} /> : <MdMenu size={24} />}
+      </button>
+
+      {/* Sidebar Container */}
+      <div
+        className={`fixed top-0 left-0 h-full bg-gray-800 p-4 z-40 transition-transform duration-300
+        ${
+          isOpen ? "translate-x-0" : "-translate-x-full"
+        } lg:translate-x-0 lg:w-64`}
+      >
+        {/* Sidebar Header */}
+        <div className="my-2 mb-4">
+          <h1 className="text-2xl text-white font-bold">Dashboard Edward</h1>
+        </div>
+
+        {/* Horizontal Line */}
+        <hr className="border-gray-600" />
+
+        {/* Sidebar Links */}
+        <ul className="mt-3 text-white font-bold">
+          <li className="mb-4 rounded hover:shadow hover:bg-blue-500 py-2 px-3">
+            <Link to="/" className="flex items-center">
+              <MdManageAccounts className="w-6 h-6 mr-2" />
               Manage Karyawan
-            </a>
+            </Link>
           </li>
-        </Link>
-        <Link to="/gajian">
-          <li className="mb-4 rounded hover:shadow hover:bg-blue-500 py-2">
-            <a className="px-3">
-              <FaMoneyBillWaveAlt className="inline-block w-6 h-6 mr-2 -mt-2"></FaMoneyBillWaveAlt>
+          <li className="mb-4 rounded hover:shadow hover:bg-blue-500 py-2 px-3">
+            <Link to="/gajian" className="flex items-center">
+              <FaMoneyBillWaveAlt className="w-6 h-6 mr-2" />
               Gajian
-            </a>
+            </Link>
           </li>
-        </Link>
-        <Link to="/kategori">
-          <li className="mb-4 rounded hover:shadow hover:bg-blue-500 py-2">
-            <a href="" className="px-3">
-              <BiSolidCategory className="inline-block w-6 h-6 mr-2 -mt-2"></BiSolidCategory>
+          <li className="mb-4 rounded hover:shadow hover:bg-blue-500 py-2 px-3">
+            <Link to="/kategori" className="flex items-center">
+              <BiSolidCategory className="w-6 h-6 mr-2" />
               Kategori Gaji
-            </a>
+            </Link>
           </li>
-        </Link>
-      </ul>
-    </div>
+        </ul>
+      </div>
+
+      {/* Overlay for Mobile */}
+      {isOpen && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 z-30 lg:hidden"
+          onClick={toggleSidebar}
+        ></div>
+      )}
+    </>
   );
 };
 

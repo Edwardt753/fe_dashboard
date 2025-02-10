@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
+const API_BASE_URL = import.meta.env.VITE_API_LOCAL_URL;
 
 const useAuth = () => {
   const navigate = useNavigate();
@@ -10,12 +11,9 @@ const useAuth = () => {
 
   const refreshToken = async () => {
     try {
-      const response = await axios.get(
-        "https://api2.edwardver753.my.id/refreshtoken",
-        {
-          withCredentials: true,
-        }
-      );
+      const response = await axios.get(`${API_BASE_URL}/refreshtoken`, {
+        withCredentials: true,
+      });
       setToken(response.data.token);
       const decoded = jwtDecode(response.data.token);
       setExpire(decoded.exp);
@@ -32,12 +30,9 @@ const useAuth = () => {
     async (config) => {
       const currentDate = new Date();
       if (expire * 1000 < currentDate.getTime()) {
-        const response = await axios.get(
-          "https://api2.edwardver753.my.id/refreshtoken",
-          {
-            withCredentials: true,
-          }
-        );
+        const response = await axios.get(`${API_BASE_URL}/refreshtoken`, {
+          withCredentials: true,
+        });
         config.headers.Authorization = `Bearer ${response.data.token}`;
         setToken(response.data.token);
         const decoded = jwtDecode(response.data.token);

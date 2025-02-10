@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import React from "react";
+const API_BASE_URL = import.meta.env.VITE_API_LOCAL_URL;
 
 const LoginPage = () => {
   const [username, setUsername] = useState("");
@@ -12,7 +13,7 @@ const LoginPage = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch("https://api2.edwardver753.my.id/login", {
+      const response = await fetch(`${API_BASE_URL}/login`, {
         method: "POST",
         credentials: "include",
         headers: {

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom"; // Import the hook
-import axios from "axios";
-import { jwtDecode } from "jwt-decode";
+import useAuth from "../../lib/UseAuth";
+const API_BASE_URL = import.meta.env.VITE_API_LOCAL_URL;
 
 const AddKaryawanPage = () => {
   const [formData, setFormData] = useState({
@@ -10,51 +10,8 @@ const AddKaryawanPage = () => {
     tingkat_gaji: "",
   });
   const [isKategory, setIsKategory] = useState([]);
-  const [token, setToken] = useState("");
-  const [expire, setExpire] = useState("");
   const navigate = useNavigate(); // Initialize the hook
-
-  const refreshToken = async () => {
-    try {
-      const response = await axios.get(
-        "https://api2.edwardver753.my.id/refreshtoken",
-        {
-          withCredentials: true,
-        }
-      );
-      setToken(response.data.token);
-      const decoded = jwtDecode(response.data.token);
-      setExpire(decoded.exp);
-    } catch (error) {
-      if (error.response) {
-        navigate("/login");
-      }
-    }
-  };
-
-  const axiosJWT = axios.create();
-
-  axiosJWT.interceptors.request.use(
-    async (config) => {
-      const currentDate = new Date();
-      if (expire * 1000 < currentDate.getTime()) {
-        const response = await axios.get(
-          "https://api2.edwardver753.my.id/refreshtoken",
-          {
-            withCredentials: true,
-          }
-        );
-        config.headers.Authorization = `Bearer ${response.data.token}`;
-        setToken(response.data.token);
-        const decoded = jwtDecode(response.data.token);
-        setExpire(decoded.exp);
-      }
-      return config;
-    },
-    (error) => {
-      return Promise.reject(error);
-    }
-  );
+  const { token, axiosJWT } = useAuth();
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -66,23 +23,16 @@ const AddKaryawanPage = () => {
 
   const fetchKategoriList = async () => {
     try {
-      const response = await axiosJWT.get(
-        "https://api2.edwardver753.my.id/kategori/list",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await axiosJWT.get(`${API_BASE_URL}/kategori/list`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       setIsKategory(response.data.data);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
-
-  useEffect(() => {
-    refreshToken();
-  }, []); // Run only once on mount
 
   useEffect(() => {
     if (token) {
@@ -95,7 +45,7 @@ const AddKaryawanPage = () => {
 
     try {
       const response = await axiosJWT.post(
-        "https://api2.edwardver753.my.id/karyawan",
+        `${API_BASE_URL}/karyawan`,
         {
           fullname: formData.nama,
           gender: formData.gender,
