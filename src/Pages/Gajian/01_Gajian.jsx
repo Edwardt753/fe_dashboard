@@ -189,7 +189,10 @@ const GajianPage = () => {
                     })}
                   </td>
                   <td className="px-6 py-4">
-                    {gaji.total_gaji || "Belum dihitung"}
+                    {new Intl.NumberFormat("id-ID", {
+                      style: "currency",
+                      currency: "IDR",
+                    }).format(Math.abs(gaji.total_gaji))}
                   </td>
                   <td className="px-6 py-4">
                     <a
