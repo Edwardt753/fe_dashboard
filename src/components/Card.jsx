@@ -20,6 +20,15 @@ export const Card = ({
             </p>
           )
         )}
+        {harianData.kasbon ? (
+          <p key="kasbon">
+            <strong>Kasbon :</strong> -
+            {new Intl.NumberFormat("id-ID", {
+              style: "currency",
+              currency: "IDR",
+            }).format(Math.abs(harianData.kasbon))}
+          </p>
+        ) : null}
       </div>
 
       {/* Display Gaji Personal */}

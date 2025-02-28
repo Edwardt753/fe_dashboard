@@ -115,6 +115,7 @@ const GajianDetails = () => {
             kamis: parseFloat(e.target.Kamis.value),
             jumat: parseFloat(e.target.Jumat.value),
             sabtu: parseFloat(e.target.Sabtu.value),
+            kasbon: parseInt(e.target.kasbon.value),
           },
         },
         {
@@ -201,13 +202,25 @@ const GajianDetails = () => {
                       <input
                         type="number"
                         name={day}
-                        step="0.5"
+                        step="0.01"
                         min="0"
                         className="input input-bordered w-full"
                         required
                       />
+                      {/* NEW FEATURE */}
                     </div>
                   ))}
+                  <label className="block text-sm font-medium text-gray-700">
+                    Kas Bon Utang:
+                  </label>
+                  <input
+                    name="kasbon"
+                    type="number"
+                    step="0.1"
+                    min="0"
+                    className="input input-bordered w-full"
+                    required
+                  />
                 </div>
                 <div className="modal-action">
                   <button type="submit" className="btn btn-success">
@@ -242,13 +255,13 @@ const GajianDetails = () => {
             ))}
           </div>
 
+          {/* Floating Box */}
           <FloatingBox
             gajiList={gajiList}
             CalculateGaji={CalculateGaji}
             totalGaji={totalGaji}
           />
         </div>
-        {/* Floating Box */}
       </div>
     </div>
   );

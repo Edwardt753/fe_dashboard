@@ -3,7 +3,6 @@ import Navbar from "../../components/isNavbar";
 import Sidebar from "../../components/Sidebar";
 import { useNavigate, useLocation } from "react-router-dom";
 import useAuth from "../../lib/UseAuth";
-
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const KaryawanPage = () => {
